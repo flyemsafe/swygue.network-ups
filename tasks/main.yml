@@ -1,5 +1,5 @@
 ---
-- include_vars: "{{ansible_distribution}}.yml"
+- include_vars: "{{ ansible_distribution }}.yml"
 
 - include: server.yml
   when: >
@@ -19,3 +19,18 @@
     nut_nut_conf.MODE == 'standalone'
 
 - include: state.yml
+
+- name: Check if EPEL repo is configured
+  when: ansible_distribution == 'RedHat'
+  block:
+    - name: Check if {{ epel_repofile_path }} exist
+      stat:
+        path: "{{ epel_repofile_path }}"
+      register: epel_repofile_result
+
+    - name: Fail when {{ epel_repofile_path }} does not exist
+      fail:
+        msg: "This role requires the EPEL repository to be configured on {{ ansible_distribution }}"
+      when: not epel_repofile_result.stat.exists
+    
+

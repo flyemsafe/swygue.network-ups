@@ -1,3 +1,7 @@
+---
+# Options nut_nut_conf
+# MODES: netserver, standalone, netclient
+
 nut_nut_conf:
   MODE: none
   UPSD_OPTIONS:
